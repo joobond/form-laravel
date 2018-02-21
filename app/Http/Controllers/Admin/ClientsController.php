@@ -24,9 +24,10 @@ class ClientsController extends Controller //ControllerResource
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('admin.clients.create',['client'=> new Client()]);
+        $clientType = Client::getClientType($request->client_type);
+        return view('admin.clients.create',['client'=> new Client(),'client_type'=>$clientType]);
     }
 
     /**
