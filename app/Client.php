@@ -16,7 +16,7 @@ class Client extends Model
     ];
 
     protected $fillable = ['name', 'document_number', 'email', 'phone', 'defaulter', 'date_birth',
-        'sex', 'marital_status', 'physical_disability'];
+        'sex', 'marital_status', 'physical_disability','company_name','client_type'];
 
     public static function getClientType($type){
         return $type == Client::TYPE_LEGAL ? $type : Client::TYPE_INDIVIDUAL;

@@ -30,6 +30,6 @@ $factory->state(\App\Client::class,\App\Client::TYPE_LEGAL,function (Faker $fake
     return [
         'document_number' =>$cnpjs[array_rand($cnpjs,1)],
         'company_name' => $faker->company,
-        'client_type' => \App\Client::TYPE_INDIVIDUAL,
+        'client_type' => \App\Client::TYPE_LEGAL,
     ];
 });

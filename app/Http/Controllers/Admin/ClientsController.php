@@ -26,8 +26,8 @@ class ClientsController extends Controller //ControllerResource
      */
     public function create(Request $request)
     {
-        $clientType = Client::getClientType($request->client_type);
-        return view('admin.clients.create',['client'=> new Client(),'client_type'=>$clientType]);
+        $client_type = Client::getClientType($request->client_type);
+        return view('admin.clients.create',['client'=> new Client(),'client_type'=>$client_type]);
     }
 
     /**
@@ -38,9 +38,9 @@ class ClientsController extends Controller //ControllerResource
      */
     public function store(Request $request)
     {
-        $this->_validate($request);
-        $data=$request->all();
+        $data = $this->_validate($request);
         $data['defaulter']= $request->has('defaulter');
+        $data['client_type'] = Client::getClientType($request->client_type);
         Client::create($data);
         return redirect()->route('clients.index');
     }
@@ -64,7 +64,8 @@ class ClientsController extends Controller //ControllerResource
      */
     public function edit(Client $client) //Route Model Binding Implicito
     {
-        return view ('admin.clients.edit',compact('client'));
+        $client_type = $client->client_type;
+        return view ('admin.clients.edit',compact('client','client_type'));
     }
 
     /**
@@ -75,8 +76,7 @@ class ClientsController extends Controller //ControllerResource
      */
     public function update(Request $request, Client $client)
     {
-        $this->_validate($request);
-        $data=$request->all();
+        $data = $this->_validate($request);
         $data['defaulter']= $request->has('defaulter');
         $client->fill($data);
         $client->save();
@@ -97,16 +97,25 @@ class ClientsController extends Controller //ControllerResource
 
     protected function _validate(Request $request){
         //Validando os campos do meu formulário
-        $marital_status= implode(',',array_keys(Client::MARITAL_STATUS));
-        $this->validate($request,[
+        $client_type = Client::getClientType($request->client_type);
+        $rules=[
             'name' => 'required|max:255',
             'document_number' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
+        ];
+        $marital_status= implode(',',array_keys(Client::MARITAL_STATUS));
+        $rulesIndividual = [
             'date_birth' => 'required|date',
             'marital_status' => "required|in:$marital_status",
             'sex' => 'required|in:m,f',
-            'physical_disability' => 'max:255'
-        ]);
+            'physical_disability' => 'max:255',
+        ];
+        $rulesLegal = [
+            'company_name' =>'required|max:255',
+        ];
+
+        return $this->validate($request,$client_type == Client::TYPE_INDIVIDUAL ?
+            $rules+$rulesIndividual:$rules+$rulesLegal);
     }
 }
