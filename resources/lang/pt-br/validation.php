@@ -84,6 +84,7 @@ return [
     'unique'               => ':attribute já está em uso.',
     'uploaded'             => ':attribute falhou no upload.',
     'url'                  => 'O formato de :attribute é inválido.',
+    'document_number'      => 'O documento não é válido.',
 
     /*
     |--------------------------------------------------------------------------

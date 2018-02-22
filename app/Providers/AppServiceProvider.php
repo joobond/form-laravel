@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Code\Validator\Cnpj;
+use Code\Validator\Cpf;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
