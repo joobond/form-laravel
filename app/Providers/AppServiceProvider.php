@@ -16,6 +16,10 @@ class AppServiceProvider extends ServiceProvider
         \Schema::defaultStringLength(191);
         $plataform = \Schema::getConnection()->getDoctrineSchemaManager()->getDatabasePlatform();
         $plataform->registerDoctrineTypeMapping('enum','string');
+        \Validator::extend('document_number', function($attribute,$value,$parameters,$validator){
+            $documentValidator = $parameters[0] =='cpf'?new Cpf():new Cnpj();
+            return $documentValidator->isValid($value);
+        });
     }
 
     /**
