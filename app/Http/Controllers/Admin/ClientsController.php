@@ -98,9 +98,11 @@ class ClientsController extends Controller //ControllerResource
     protected function _validate(Request $request){
         //Validando os campos do meu formulário
         $client_type = Client::getClientType($request->client_type);
+        $client = $request->route('client');
+        $client_id = $client instanceof Client?$client->id:null;
         $rules=[
             'name' => 'required|max:255',
-            'document_number' => 'required',
+            'document_number' => "required|unique:clients,document_number,$client_id",
             'email' => 'required|email',
             'phone' => 'required',
         ];
